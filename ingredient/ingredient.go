@@ -1,6 +1,12 @@
-package model
+package ingredient
 
-import "github.com/jinzhu/gorm"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+	"github.com/kdelwat/recipaliser/db"
+)
 
 type Ingredient struct {
 	gorm.Model
@@ -59,4 +65,31 @@ type Ingredient struct {
 	C226w3Docosahexaenoic                     float64
 	TotalLongChainOmega3FattyAcids            float64
 	TotalTransFattyAcids                      float64
+}
+
+func New(ingredient Ingredient) (Ingredient, error) {
+	var existingIngredient Ingredient
+
+	err := db.Db.First(&existingIngredient, "ausnut_id = ?", ingredient.AusnutID).Error
+
+	if err != gorm.ErrRecordNotFound {
+		return ingredient, errors.New("an ingredient with the same AUSNUT ID already exists")
+	}
+
+	err = db.Db.Create(&ingredient).Error
+
+	if err != nil {
+		return ingredient, errors.New(fmt.Sprintf("Could not create new ingredient in database: %v", err))
+	}
+
+	return ingredient, nil
+
+}
+
+func Search(searchString string) ([]Ingredient, error) {
+	var matchingIngredients []Ingredient
+
+	err := db.Db.Where("name LIKE ?", "%"+searchString+"%").Find(&matchingIngredients).Error
+
+	return matchingIngredients, err
 }

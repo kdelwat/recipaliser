@@ -1,4 +1,4 @@
-package model
+package recipe
 
 import (
 	"errors"
@@ -7,15 +7,16 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/kdelwat/recipaliser/db"
+	"github.com/kdelwat/recipaliser/ingredient"
 )
 
 type Recipe struct {
 	gorm.Model
 	Name        string
-	Ingredients []Ingredient `gorm:"many2many:recipe_ingredients;"`
+	Ingredients []ingredient.Ingredient `gorm:"many2many:recipe_ingredients;"`
 }
 
-func NewRecipe(name string) (Recipe, error) {
+func New(name string) (Recipe, error) {
 	var newRecipe Recipe
 	var existingRecipe Recipe
 
@@ -25,7 +26,7 @@ func NewRecipe(name string) (Recipe, error) {
 		return newRecipe, errors.New("A recipe with the same name already exists")
 	}
 
-	err = db.Db.Create(&Recipe{Name: name, Ingredients: []Ingredient{}}).Error
+	err = db.Db.Create(&Recipe{Name: name, Ingredients: []ingredient.Ingredient{}}).Error
 
 	if err != nil {
 		return newRecipe, errors.New(fmt.Sprintf("Could not create new recipe in database: %v", err))

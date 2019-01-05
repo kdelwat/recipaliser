@@ -10,9 +10,7 @@ import (
 
 	"strconv"
 
-	"github.com/jinzhu/gorm"
-	"github.com/kdelwat/recipaliser/db"
-	"github.com/kdelwat/recipaliser/model"
+	"github.com/kdelwat/recipaliser/ingredient"
 	"github.com/spf13/cobra"
 	"gopkg.in/cheggaaa/pb.v1"
 )
@@ -46,7 +44,7 @@ func importIngredients(filename string) {
 		fmt.Printf("Could not read header line of %v: %v", filename, err)
 	}
 
-	var ingredients []model.Ingredient
+	var ingredients []ingredient.Ingredient
 
 	lineNo := 1
 	for {
@@ -72,7 +70,7 @@ func importIngredients(filename string) {
 			nutritionalData = append(nutritionalData, nutritionalInfoAsFloat)
 		}
 
-		ingredients = append(ingredients, model.Ingredient{
+		ingredients = append(ingredients, ingredient.Ingredient{
 			AusnutID: line[0],
 			Name:     line[2],
 			EnergyWithDietaryFibre:    nutritionalData[0],
@@ -136,20 +134,18 @@ func importIngredients(filename string) {
 
 	ingredientsImported := 0
 	ingredientsSkipped := 0
-	for _, ingredient := range ingredients {
-		var existingIngredient model.Ingredient
+	for _, i := range ingredients {
+		_, err = ingredient.New(i)
 
-		err := db.Db.First(existingIngredient, "ausnut_id = ?", ingredient.AusnutID).Error
-
-		if err == gorm.ErrRecordNotFound {
-			ingredientsImported++
-			db.Db.Create(&ingredient)
+		if err.Error() == "an ingredient with the same AUSNUT ID already exists" {
+			ingredientsSkipped++
 		} else if err != nil {
 			fmt.Printf("Could not import %v: %v", filename, err)
 			os.Exit(1)
 		} else {
-			ingredientsSkipped++
+			ingredientsImported++
 		}
+
 		progressBar.Increment()
 	}
 

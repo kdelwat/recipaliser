@@ -5,8 +5,7 @@ import (
 
 	"os"
 
-	"github.com/kdelwat/recipaliser/db"
-	"github.com/kdelwat/recipaliser/model"
+	"github.com/kdelwat/recipaliser/ingredient"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +15,13 @@ var searchIngredientCommand = &cobra.Command{
 	Short: "Search for an ingredient",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		searchIngredients(args[0])
+		ingredients, err := ingredient.Search(args[0])
+
+		if err != nil {
+			fmt.Printf("Error: %v", err)
+		}
+
+		printIngredients(ingredients)
 	},
 }
 
@@ -24,22 +29,18 @@ func init() {
 	ingredientCmd.AddCommand(searchIngredientCommand)
 }
 
-func searchIngredients(searchString string) {
-	var matchingIngredients []model.Ingredient
+func printIngredients(ingredients []ingredient.Ingredient) {
+	fmt.Printf("Found %v matches\n", len(ingredients))
 
-	db.Db.Where("name LIKE ?", "%"+searchString+"%").Find(&matchingIngredients)
-
-	fmt.Printf("Found %v matches\n", len(matchingIngredients))
-
-	if len(matchingIngredients) == 0 {
+	if len(ingredients) == 0 {
 		return
 	}
 
 	outputTable := tablewriter.NewWriter(os.Stdout)
 	outputTable.SetHeader([]string{"ID", "Name"})
 
-	for _, ingredient := range matchingIngredients {
-		outputTable.Append([]string{fmt.Sprint(ingredient.ID), ingredient.Name})
+	for _, i := range ingredients {
+		outputTable.Append([]string{fmt.Sprint(i.ID), i.Name})
 	}
 
 	outputTable.Render()

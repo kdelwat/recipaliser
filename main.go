@@ -7,7 +7,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/kdelwat/recipaliser/cmd"
 	"github.com/kdelwat/recipaliser/db"
-	"github.com/kdelwat/recipaliser/model"
+	"github.com/kdelwat/recipaliser/ingredient"
+	"github.com/kdelwat/recipaliser/recipe"
 )
 
 func main() {
@@ -21,6 +22,6 @@ func main() {
 
 	defer db.Db.Close()
 
-	db.Db.AutoMigrate(&model.Recipe{}, &model.Ingredient{})
+	db.Db.AutoMigrate(&recipe.Recipe{}, &ingredient.Ingredient{})
 	cmd.Execute()
 }
