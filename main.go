@@ -21,6 +21,6 @@ func main() {
 
 	defer db.Db.Close()
 
-	db.Db.AutoMigrate(&model.Ingredient{})
+	db.Db.AutoMigrate(&model.Recipe{}, &model.Ingredient{})
 	cmd.Execute()
 }
