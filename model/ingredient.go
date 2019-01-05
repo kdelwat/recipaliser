@@ -5,6 +5,7 @@ import "github.com/jinzhu/gorm"
 type Ingredient struct {
 	gorm.Model
 	AusnutID                                  string
+	Name                                      string
 	EnergyWithDietaryFibre                    float64
 	EnergyWithoutDietaryFibre                 float64
 	Moisture                                  float64

@@ -73,7 +73,8 @@ func importIngredients(filename string) {
 		}
 
 		ingredients = append(ingredients, model.Ingredient{
-			AusnutID:                  line[0],
+			AusnutID: line[0],
+			Name:     line[2],
 			EnergyWithDietaryFibre:    nutritionalData[0],
 			EnergyWithoutDietaryFibre: nutritionalData[1],
 			Moisture:                  nutritionalData[2],
