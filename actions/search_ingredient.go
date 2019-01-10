@@ -1,11 +1,11 @@
-package cmd
+package actions
 
 import (
 	"fmt"
 
 	"os"
 
-	"github.com/kdelwat/recipaliser/ingredient"
+	"github.com/kdelwat/recipaliser"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ var searchIngredientCommand = &cobra.Command{
 	Short: "Search for an ingredient",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ingredients, err := ingredient.Search(args[0])
+		ingredients, err := is.SearchIngredient(args[0])
 
 		if err != nil {
 			fmt.Printf("Error: %v", err)
@@ -29,7 +29,7 @@ func init() {
 	ingredientCmd.AddCommand(searchIngredientCommand)
 }
 
-func printIngredients(ingredients []ingredient.Ingredient) {
+func printIngredients(ingredients []*recipaliser.Ingredient) {
 	fmt.Printf("Found %v matches\n", len(ingredients))
 
 	if len(ingredients) == 0 {

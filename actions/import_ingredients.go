@@ -1,4 +1,4 @@
-package cmd
+package actions
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 	"strconv"
 
-	"github.com/kdelwat/recipaliser/ingredient"
+	"github.com/kdelwat/recipaliser"
 	"github.com/spf13/cobra"
 	"gopkg.in/cheggaaa/pb.v1"
 )
@@ -44,7 +44,7 @@ func importIngredients(filename string) {
 		fmt.Printf("Could not read header line of %v: %v", filename, err)
 	}
 
-	var ingredients []ingredient.Ingredient
+	var ingredients []recipaliser.Ingredient
 
 	lineNo := 1
 	for {
@@ -70,7 +70,7 @@ func importIngredients(filename string) {
 			nutritionalData = append(nutritionalData, nutritionalInfoAsFloat)
 		}
 
-		ingredients = append(ingredients, ingredient.Ingredient{
+		ingredients = append(ingredients, recipaliser.Ingredient{
 			AusnutID: line[0],
 			Name:     line[2],
 			EnergyWithDietaryFibre:    nutritionalData[0],
@@ -135,7 +135,7 @@ func importIngredients(filename string) {
 	ingredientsImported := 0
 	ingredientsSkipped := 0
 	for _, i := range ingredients {
-		_, err = ingredient.New(i)
+		err = is.CreateIngredient(&i)
 
 		if err.Error() == "an ingredient with the same AUSNUT ID already exists" {
 			ingredientsSkipped++

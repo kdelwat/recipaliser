@@ -1,10 +1,9 @@
-package cmd
+package actions
 
 import (
-	"fmt"
-	"os"
+	"log"
 
-	"github.com/kdelwat/recipaliser/recipe"
+	"github.com/kdelwat/recipaliser"
 	"github.com/spf13/cobra"
 )
 
@@ -13,9 +12,8 @@ var newRecipeCmd = &cobra.Command{
 	Short: "Create a new recipe",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, err := recipe.New(args[0]); err != nil {
-			fmt.Printf("Error: %v", err)
-			os.Exit(0)
+		if err := rs.CreateRecipe(&recipaliser.Recipe{Name: args[0]}); err != nil {
+			log.Fatalf("Error: %v", err)
 		}
 	},
 }

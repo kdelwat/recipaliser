@@ -1,7 +1,8 @@
-package cmd
+package actions
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
