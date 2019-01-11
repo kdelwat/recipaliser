@@ -8,9 +8,9 @@ type RecipeService interface {
 }
 
 type IngredientService interface {
-	Ingredient(id IngredientID) (*Ingredient, error)
+	Ingredient(id IngredientID) (Ingredient, error)
 	CreateIngredient(ingredient *Ingredient) error
-	SearchIngredient(nameSubstring string) ([]*Ingredient, error)
+	SearchIngredient(nameSubstring string) ([]Ingredient, error)
 }
 
 type IngredientID uint

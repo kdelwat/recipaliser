@@ -10,12 +10,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var ingredientSearchName string
+
 var searchIngredientCommand = &cobra.Command{
 	Use:   "search",
 	Short: "Search for an ingredient",
-	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ingredients, err := is.SearchIngredient(args[0])
+		initServices()
+		ingredients, err := is.SearchIngredient(ingredientSearchName)
 
 		if err != nil {
 			fmt.Printf("Error: %v", err)
@@ -26,10 +28,11 @@ var searchIngredientCommand = &cobra.Command{
 }
 
 func init() {
+	searchIngredientCommand.Flags().StringVarP(&ingredientSearchName, "name", "n", "", "A search term within the name of the ingredient")
 	ingredientCmd.AddCommand(searchIngredientCommand)
 }
 
-func printIngredients(ingredients []*recipaliser.Ingredient) {
+func printIngredients(ingredients []recipaliser.Ingredient) {
 	fmt.Printf("Found %v matches\n", len(ingredients))
 
 	if len(ingredients) == 0 {
@@ -37,7 +40,7 @@ func printIngredients(ingredients []*recipaliser.Ingredient) {
 	}
 
 	outputTable := tablewriter.NewWriter(os.Stdout)
-	outputTable.SetHeader([]string{"ID", "Name"})
+	outputTable.SetHeader([]string{"Name"})
 
 	for _, i := range ingredients {
 		outputTable.Append([]string{i.Name})

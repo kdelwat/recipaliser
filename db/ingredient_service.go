@@ -10,8 +10,8 @@ type IngredientService struct {
 	database *Database
 }
 
-func (is *IngredientService) Ingredient(id recipaliser.IngredientID) (*recipaliser.Ingredient, error) {
-	return nil, nil
+func (is *IngredientService) Ingredient(id recipaliser.IngredientID) (recipaliser.Ingredient, error) {
+	return recipaliser.Ingredient{}, nil
 }
 
 func (is *IngredientService) CreateIngredient(ingredient *recipaliser.Ingredient) error {
@@ -30,6 +30,14 @@ func (is *IngredientService) CreateIngredient(ingredient *recipaliser.Ingredient
 	return err
 }
 
-func (is *IngredientService) SearchIngredient(nameSubstring string) ([]*recipaliser.Ingredient, error) {
-	return nil, nil
+func (is *IngredientService) SearchIngredient(nameSubstring string) ([]recipaliser.Ingredient, error) {
+	var ingredients []recipaliser.Ingredient
+
+	err := is.database.Collection("ingredients").Find("name LIKE ?", "%"+nameSubstring+"%").All(&ingredients)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ingredients, nil
 }
