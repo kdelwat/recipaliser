@@ -20,6 +20,7 @@ var importIngredientsCommand = &cobra.Command{
 	Short: "Import ingredients into the database",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		initServices()
 		importIngredients(args[0])
 	},
 }
@@ -137,7 +138,7 @@ func importIngredients(filename string) {
 	for _, i := range ingredients {
 		err = is.CreateIngredient(&i)
 
-		if err.Error() == "an ingredient with the same AUSNUT ID already exists" {
+		if err == recipaliser.IngredientAlreadyExists {
 			ingredientsSkipped++
 		} else if err != nil {
 			fmt.Printf("Could not import %v: %v", filename, err)

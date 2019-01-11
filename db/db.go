@@ -1,6 +1,7 @@
 package db
 
 import (
+	"upper.io/db.v3"
 	"upper.io/db.v3/lib/sqlbuilder"
 	"upper.io/db.v3/sqlite"
 )
@@ -31,6 +32,10 @@ func NewDatabase(path string) (*Database, error) {
 	database.session = session
 
 	return database, err
+}
+
+func (database *Database) Collection(name string) db.Collection {
+	return database.session.Collection(name)
 }
 
 func (database *Database) Close() error {

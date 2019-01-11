@@ -30,15 +30,6 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	database, err := db.NewDatabase(dbPath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	is = &database.IngredientService
-	rs = &database.RecipeService
 }
 
 func init() {
@@ -67,4 +58,15 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func initServices() {
+	database, err := db.NewDatabase(dbPath)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	is = &database.IngredientService
+	rs = &database.RecipeService
 }

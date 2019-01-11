@@ -40,7 +40,7 @@ func printIngredients(ingredients []*recipaliser.Ingredient) {
 	outputTable.SetHeader([]string{"ID", "Name"})
 
 	for _, i := range ingredients {
-		outputTable.Append([]string{fmt.Sprint(i.ID), i.Name})
+		outputTable.Append([]string{i.Name})
 	}
 
 	outputTable.Render()
