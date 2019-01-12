@@ -13,7 +13,7 @@ type IngredientService interface {
 	SearchIngredient(nameSubstring string) ([]Ingredient, error)
 }
 
-type IngredientID uint
+type IngredientID string
 type IngredientAmount uint
 type Ingredient struct {
 	AusnutID                                  string  `db:"ausnut_id"`

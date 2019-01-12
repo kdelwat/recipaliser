@@ -11,7 +11,17 @@ type IngredientService struct {
 }
 
 func (is *IngredientService) Ingredient(id recipaliser.IngredientID) (recipaliser.Ingredient, error) {
-	return recipaliser.Ingredient{}, nil
+	var ingredient recipaliser.Ingredient
+
+	if err := is.database.Collection("ingredients").Find("name = ?", id).One(&ingredient); err != nil {
+		if err.Error() == "upper: no more rows in this result set" {
+			return recipaliser.Ingredient{}, recipaliser.IngredientNotFound
+		} else {
+			return recipaliser.Ingredient{}, err
+		}
+	}
+
+	return ingredient, nil
 }
 
 func (is *IngredientService) CreateIngredient(ingredient *recipaliser.Ingredient) error {
