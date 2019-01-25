@@ -1,6 +1,8 @@
 package db
 
 import (
+	"fmt"
+	"github.com/iancoleman/strcase"
 	"github.com/kdelwat/recipaliser"
 )
 
@@ -50,4 +52,31 @@ func (is *IngredientService) SearchIngredient(nameSubstring string) ([]recipalis
 	}
 
 	return ingredients, nil
+}
+
+func (is *IngredientService) ListIngredients(sortField string, sortOrder uint, maxIngredients int) ([]recipaliser.Ingredient, error) {
+	var ingredients []recipaliser.Ingredient
+
+	var orderBy string
+	if sortOrder == recipaliser.Sort_Ascending {
+		orderBy = fmt.Sprintf("%v ASC", strcase.ToSnake(sortField))
+	} else {
+		orderBy = fmt.Sprintf("%v DESC", strcase.ToSnake(sortField))
+	}
+
+	var err error
+
+	if maxIngredients != -1 {
+		err = is.database.Collection("ingredients").Find().OrderBy(orderBy).Limit(maxIngredients).All(&ingredients)
+
+	} else {
+		err = is.database.Collection("ingredients").Find().OrderBy(orderBy).All(&ingredients)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ingredients, nil
+
 }

@@ -1,5 +1,10 @@
 package recipaliser
 
+const (
+	Sort_Ascending  = iota
+	Sort_Descending = iota
+)
+
 type RecipeService interface {
 	Recipe(id RecipeID) (*Recipe, error)
 	CreateRecipe(recipe *Recipe) error
@@ -11,6 +16,7 @@ type IngredientService interface {
 	Ingredient(id IngredientID) (Ingredient, error)
 	CreateIngredient(ingredient *Ingredient) error
 	SearchIngredient(nameSubstring string) ([]Ingredient, error)
+	ListIngredients(sortField string, sortOrder uint, maxIngredients int) ([]Ingredient, error)
 }
 
 type IngredientID string
