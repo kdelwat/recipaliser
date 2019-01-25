@@ -1,6 +1,10 @@
 package db
 
-import "github.com/kdelwat/recipaliser"
+import (
+	"github.com/kdelwat/recipaliser"
+	"log"
+	"upper.io/db.v3"
+)
 
 var _ recipaliser.RecipeService = &RecipeService{}
 
@@ -27,8 +31,27 @@ func (rs *RecipeService) CreateRecipe(recipe *recipaliser.Recipe) error {
 }
 
 func (rs *RecipeService) AddIngredientToRecipe(id recipaliser.RecipeID, ingredientId recipaliser.IngredientID, amount recipaliser.IngredientAmount) error {
-	return nil
+	recipeIngredient := recipaliser.RecipeIngredient{RecipeName: string(id), IngredientName: string(ingredientId), Amount: float64(amount)}
+
+	existingRecipeIngredients := rs.database.Collection("recipe_ingredients").Find(db.And(db.Cond{"recipe_name": id}, db.Cond{"ingredient_name": ingredientId}))
+
+	existingCount, err := existingRecipeIngredients.Count()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if existingCount == 0 {
+		_, err := rs.database.Collection("recipe_ingredients").Insert(recipeIngredient)
+
+		return err
+	} else {
+		err := existingRecipeIngredients.Update(recipeIngredient)
+
+		return err
+	}
 }
+
 func (rs *RecipeService) RemoveIngredientFromRecipe(id recipaliser.RecipeID, ingredientId recipaliser.IngredientID) error {
 	return nil
 }

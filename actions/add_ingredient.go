@@ -1,17 +1,36 @@
 package actions
 
 import (
-	"fmt"
+	"github.com/kdelwat/recipaliser"
+	"log"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
 
-// addIngredientCmd represents the add command
 var addIngredientCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add an ingredient to a recipe",
+	Args:  cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
+		initServices()
+
+		recipeID := recipaliser.RecipeID(args[0])
+		ingredientID := recipaliser.IngredientID(args[1])
+
+		amount, err := strconv.ParseFloat(args[2], 64)
+
+		if err != nil {
+			log.Fatal("Amount must be a number")
+		}
+
+		if amount < 0 {
+			log.Fatal("Amount must be positive")
+		}
+
+		if err := rs.AddIngredientToRecipe(recipeID, ingredientID, recipaliser.IngredientAmount(amount)); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 

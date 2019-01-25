@@ -62,8 +62,9 @@ CREATE TABLE recipes (
 );
 
 CREATE TABLE recipe_ingredients (
-    recipe_name TEXT,
-    ingredient_name TEXT,
+    recipe_name TEXT NOT NULL,
+    ingredient_name TEXT NOT NULL,
+    amount REAL NOT NULL,
     FOREIGN KEY(recipe_name) REFERENCES recipes(name),
     FOREIGN KEY(ingredient_name) REFERENCES ingredients(name)
 );

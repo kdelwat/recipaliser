@@ -20,7 +20,7 @@ type IngredientService interface {
 }
 
 type IngredientID string
-type IngredientAmount uint
+type IngredientAmount float64
 type Ingredient struct {
 	AusnutID                                  string  `db:"ausnut_id"`
 	Name                                      string  `db:"name"`
@@ -79,7 +79,13 @@ type Ingredient struct {
 	TotalTransFattyAcids                      float64 `db:"total_trans_fatty_acids"`
 }
 
-type RecipeID uint
+type RecipeID string
 type Recipe struct {
 	Name string `db:"name"`
+}
+
+type RecipeIngredient struct {
+	RecipeName     string  `db:"recipe_name"`
+	IngredientName string  `db:"ingredient_name"`
+	Amount         float64 `db:"amount"`
 }
