@@ -3,6 +3,7 @@ package actions
 import (
 	"fmt"
 	"github.com/kdelwat/recipaliser"
+	"github.com/kdelwat/recipaliser/formatters"
 	"github.com/spf13/cobra"
 	"log"
 )
@@ -32,7 +33,7 @@ var listIngredientCommand = &cobra.Command{
 		if err != nil {
 			fmt.Printf("Error: %v", err)
 		} else {
-			printIngredients(ingredients)
+			formatters.PrintIngredients(ingredients, selections...)
 		}
 	},
 }
