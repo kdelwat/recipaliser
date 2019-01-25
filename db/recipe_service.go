@@ -53,5 +53,7 @@ func (rs *RecipeService) AddIngredientToRecipe(id recipaliser.RecipeID, ingredie
 }
 
 func (rs *RecipeService) RemoveIngredientFromRecipe(id recipaliser.RecipeID, ingredientId recipaliser.IngredientID) error {
-	return nil
+	existingRecipeIngredients := rs.database.Collection("recipe_ingredients").Find(db.And(db.Cond{"recipe_name": id}, db.Cond{"ingredient_name": ingredientId}))
+
+	return existingRecipeIngredients.Delete()
 }

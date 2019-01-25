@@ -1,16 +1,24 @@
 package actions
 
 import (
-	"fmt"
-
+	"github.com/kdelwat/recipaliser"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 var removeIngredientCmd = &cobra.Command{
 	Use:   "remove",
 	Short: "Remove an ingredient from a recipe",
+	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("remove called")
+		initServices()
+
+		recipeID := recipaliser.RecipeID(args[0])
+		ingredientID := recipaliser.IngredientID(args[1])
+
+		if err := rs.RemoveIngredientFromRecipe(recipeID, ingredientID); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
