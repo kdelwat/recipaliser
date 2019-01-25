@@ -12,7 +12,10 @@ var newRecipeCmd = &cobra.Command{
 	Short: "Create a new recipe",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := rs.CreateRecipe(&recipaliser.Recipe{Name: args[0]}); err != nil {
+		initServices()
+		recipe := recipaliser.Recipe{Name: args[0]}
+
+		if err := rs.CreateRecipe(&recipe); err != nil {
 			log.Fatalf("Error: %v", err)
 		}
 	},

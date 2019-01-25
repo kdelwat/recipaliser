@@ -81,6 +81,5 @@ type Ingredient struct {
 
 type RecipeID uint
 type Recipe struct {
-	ID   RecipeID `db:"id"`
-	Name string   `db:"name"`
+	Name string `db:"name"`
 }

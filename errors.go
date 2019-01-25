@@ -4,6 +4,7 @@ type Error string
 
 const (
 	IngredientAlreadyExists = Error("ingredient already exists")
+	RecipeAlreadyExists     = Error("recipe already exists")
 	IngredientNotFound      = Error("ingredient not found")
 )
 

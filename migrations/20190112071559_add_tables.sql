@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE ingredients (
+CREATE TABLE IF NOT EXISTS ingredients (
     name TEXT NOT NULL PRIMARY KEY,
     ausnut_id TEXT NOT NULL,
     energy_with_dietary_fibre REAL NOT NULL,
@@ -57,5 +57,18 @@ CREATE TABLE ingredients (
     total_trans_fatty_acids REAL NOT NULL
 );
 
+CREATE TABLE recipes (
+    name TEXT NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE recipe_ingredients (
+    recipe_name TEXT,
+    ingredient_name TEXT,
+    FOREIGN KEY(recipe_name) REFERENCES recipes(name),
+    FOREIGN KEY(ingredient_name) REFERENCES ingredients(name)
+);
+
 -- +goose Down
 DROP TABLE ingredients;
+DROP TABLE recipes;
+DROP TABLE recipe_ingredients;
