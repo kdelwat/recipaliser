@@ -12,8 +12,18 @@ type RecipeService struct {
 	database *Database
 }
 
-func (rs *RecipeService) Recipe(id recipaliser.RecipeID) (*recipaliser.Recipe, error) {
-	return nil, nil
+func (rs *RecipeService) Recipe(id recipaliser.RecipeID) (recipaliser.Recipe, error) {
+	var recipe recipaliser.Recipe
+
+	if err := rs.database.Collection("recipes").Find("name = ?", id).One(&recipe); err != nil {
+		if err.Error() == "upper: no more rows in this result set" {
+			return recipaliser.Recipe{}, recipaliser.RecipeNotFound
+		} else {
+			return recipaliser.Recipe{}, err
+		}
+	}
+
+	return recipe, nil
 }
 func (rs *RecipeService) CreateRecipe(recipe *recipaliser.Recipe) error {
 	var existingRecipe recipaliser.Recipe

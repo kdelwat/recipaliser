@@ -1,7 +1,9 @@
 package actions
 
 import (
-	"fmt"
+	"github.com/kdelwat/recipaliser"
+	"github.com/kdelwat/recipaliser/formatters"
+	"log"
 
 	"github.com/spf13/cobra"
 )
@@ -9,8 +11,18 @@ import (
 var recipeCmd = &cobra.Command{
 	Use:   "recipe",
 	Short: "Perform operations on recipes",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("recipe called")
+		initServices()
+
+		recipeName := recipaliser.RecipeID(args[0])
+		recipe, err := rs.Recipe(recipeName)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		formatters.PrintRecipe(recipe)
 	},
 }
 

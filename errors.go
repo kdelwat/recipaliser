@@ -6,6 +6,7 @@ const (
 	IngredientAlreadyExists = Error("ingredient already exists")
 	RecipeAlreadyExists     = Error("recipe already exists")
 	IngredientNotFound      = Error("ingredient not found")
+	RecipeNotFound          = Error("recipe not found")
 )
 
 func (e Error) Error() string {

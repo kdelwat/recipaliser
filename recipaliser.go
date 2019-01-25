@@ -6,7 +6,7 @@ const (
 )
 
 type RecipeService interface {
-	Recipe(id RecipeID) (*Recipe, error)
+	Recipe(id RecipeID) (Recipe, error)
 	CreateRecipe(recipe *Recipe) error
 	AddIngredientToRecipe(id RecipeID, ingredientId IngredientID, amount IngredientAmount) error
 	RemoveIngredientFromRecipe(id RecipeID, ingredientId IngredientID) error
