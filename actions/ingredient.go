@@ -149,7 +149,7 @@ func printIngredient(ingredient recipaliser.Ingredient, selections ...string) {
 	outputTable.SetHeader([]string{"Field", "Value"})
 
 	for _, i := range selectIngredientFields(ingredient, selections...) {
-		outputTable.Append([]string{i.field, fmt.Sprintf("%v", i.value)})
+		outputTable.Append([]string{i.field, fmt.Sprintf("%f", i.value)})
 	}
 
 	fmt.Println(ingredient.Name)
