@@ -23,6 +23,12 @@ func (rs *RecipeService) Recipe(id recipaliser.RecipeID) (recipaliser.Recipe, er
 		}
 	}
 
+	//var recipeIngredients []recipaliser.RecipeIngredient
+
+	if err := rs.database.Collection("recipe_ingredients").Find("recipe_name = ?", id).All(&recipe.Ingredients); err != nil {
+		return recipaliser.Recipe{}, err
+	}
+
 	return recipe, nil
 }
 func (rs *RecipeService) CreateRecipe(recipe *recipaliser.Recipe) error {
