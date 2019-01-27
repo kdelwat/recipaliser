@@ -68,7 +68,12 @@ func (rs *RecipeService) CreateRecipe(recipe *recipaliser.Recipe) error {
 	return err
 }
 
-func (rs *RecipeService) AddIngredientToRecipe(id recipaliser.RecipeID, ingredientId recipaliser.IngredientID, amount recipaliser.IngredientAmount) error {
+func (rs *RecipeService) AddIngredientToRecipe(id recipaliser.RecipeID, ingredientId recipaliser.IngredientID, amount recipaliser.IngredientAmount, is *recipaliser.IngredientService) error {
+	// Check that ingredient doesn't exist
+	if _, err := (*is).Ingredient(ingredientId); err != nil {
+		return err
+	}
+
 	recipeIngredient := recipaliser.RecipeIngredient{RecipeName: string(id), IngredientName: string(ingredientId), Amount: float64(amount)}
 
 	existingRecipeIngredients := rs.database.Collection("recipe_ingredients").Find(db.And(db.Cond{"recipe_name": id}, db.Cond{"ingredient_name": ingredientId}))

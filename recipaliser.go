@@ -5,11 +5,12 @@ const (
 	Sort_Descending = iota
 )
 
+// TODO: can embed IngredientService inside here?
 type RecipeService interface {
 	Recipe(id RecipeID) (Recipe, error)
 	RecipeIngredients(id RecipeID, is *IngredientService) ([]Ingredient, error)
 	CreateRecipe(recipe *Recipe) error
-	AddIngredientToRecipe(id RecipeID, ingredientId IngredientID, amount IngredientAmount) error
+	AddIngredientToRecipe(id RecipeID, ingredientId IngredientID, amount IngredientAmount, is *IngredientService) error
 	RemoveIngredientFromRecipe(id RecipeID, ingredientId IngredientID) error
 }
 

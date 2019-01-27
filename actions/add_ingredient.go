@@ -28,7 +28,7 @@ var addIngredientCmd = &cobra.Command{
 			log.Fatal("Amount must be positive")
 		}
 
-		if err := rs.AddIngredientToRecipe(recipeID, ingredientID, recipaliser.IngredientAmount(amount)); err != nil {
+		if err := rs.AddIngredientToRecipe(recipeID, ingredientID, recipaliser.IngredientAmount(amount), &is); err != nil {
 			log.Fatal(err)
 		}
 	},
