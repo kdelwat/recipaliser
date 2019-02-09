@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+	"github.com/kdelwat/recipaliser/jsondb"
 	"os"
 
 	"log"
@@ -18,6 +19,7 @@ var dbPath string
 
 var is recipaliser.IngredientService
 var rs recipaliser.RecipeService
+var us recipaliser.UserService
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -63,10 +65,13 @@ func initConfig() {
 func initServices() {
 	database, err := db.NewDatabase(dbPath)
 
+	jsonDatabase, err := jsondb.NewDatabase("/home/cadel/.recipaliser")
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	is = &database.IngredientService
 	rs = &database.RecipeService
+	us = &jsonDatabase.UserService
 }

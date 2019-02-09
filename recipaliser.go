@@ -21,6 +21,11 @@ type IngredientService interface {
 	ListIngredients(sortField string, sortOrder uint, maxIngredients int) ([]Ingredient, error)
 }
 
+type UserService interface {
+	User(name UserName) (User, error)
+	CreateUser(user *User) error
+}
+
 type IngredientID string
 type IngredientAmount float64
 type Ingredient struct {
@@ -149,4 +154,23 @@ type RecipeNutrition struct {
 	C226w3Docosahexaenoic                     float64
 	TotalLongChainOmega3FattyAcids            float64
 	TotalTransFattyAcids                      float64
+}
+
+type ReferenceValue struct {
+	Source string
+	Value  float64
+}
+
+type ReferenceValues = map[string]ReferenceValue
+
+type UserName = string
+type User struct {
+	Name                    UserName
+	Sex                     string
+	Age                     int
+	Weight                  float64
+	BodyFatPercentage       float64
+	NutrientReferenceValues map[string]ReferenceValues
+	IsPregnant              bool
+	IsLactating             bool
 }

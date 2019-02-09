@@ -7,6 +7,7 @@ const (
 	RecipeAlreadyExists     = Error("recipe already exists")
 	IngredientNotFound      = Error("ingredient not found")
 	RecipeNotFound          = Error("recipe not found")
+	NoRelevantUserTemplate  = Error("no relevant user template")
 )
 
 func (e Error) Error() string {
