@@ -20,7 +20,22 @@ type UserService struct {
 }
 
 func (us *UserService) User(name recipaliser.UserName) (recipaliser.User, error) {
-	panic("implement me")
+	var user recipaliser.User
+
+	userFilename := filepath.Join(us.database.Path, name+".json")
+	userFile, err := ioutil.ReadFile(userFilename)
+
+	if err != nil {
+		return recipaliser.User{}, err
+	}
+
+	err = json.Unmarshal(userFile, &user)
+
+	if err != nil {
+		return recipaliser.User{}, err
+	}
+
+	return user, nil
 }
 
 func (us *UserService) CreateUser(user *recipaliser.User) error {
