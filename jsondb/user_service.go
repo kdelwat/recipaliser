@@ -24,7 +24,16 @@ func (us *UserService) User(name recipaliser.UserName) (recipaliser.User, error)
 }
 
 func (us *UserService) CreateUser(user *recipaliser.User) error {
-	// TODO: check if a user currently exists
+	userFilename := filepath.Join(us.database.Path, user.Name+".json")
+
+	// Ensure the user doesn't already exist.
+	// Need to check the error twice to make sure it's not an error with stat
+	// From https://stackoverflow.com/a/12518877
+	if _, err := os.Stat(userFilename); err == nil {
+		return recipaliser.UserAlreadyExists
+	} else if !os.IsNotExist(err) {
+		return err
+	}
 
 	user.NutrientReferenceValues = loadReferenceValuesFromTemplate(user)
 
@@ -34,7 +43,7 @@ func (us *UserService) CreateUser(user *recipaliser.User) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(filepath.Join(us.database.Path, user.Name+".json"), marshalledUser, 0644)
+	err = ioutil.WriteFile(userFilename, marshalledUser, 0644)
 
 	if err != nil {
 		return err
